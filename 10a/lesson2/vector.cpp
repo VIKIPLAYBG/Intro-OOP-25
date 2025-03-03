@@ -25,7 +25,7 @@ using namespace std;
 // }
 //////////////////////////////
 
-int ERROR = 2147483647;
+int VERROR = -1;
 
 struct vector_t
 {
@@ -34,7 +34,7 @@ struct vector_t
     size_t capacity;
 } typedef Vector;
 
-struct vector_t *initVector();
+Vector* initVector();
 
 void pushBack(Vector *v, int number);
 
@@ -60,7 +60,7 @@ int at(Vector *v, int index);
  * @brief Pops the last element of the vector
  *
  * @param v
- * @return int if successful, ERROR - if not
+ * @return int if successful, VERROR - if not
  */
 int pop(Vector *v);
 
@@ -83,7 +83,7 @@ void pushFront(Vector *v, int number);
  * @brief Pops the first element of the vector
  *
  * @param v
- * @return int if successful, ERROR - if not
+ * @return int if successful, VERROR - if not
  */
 int popFront(Vector *v);
 
@@ -93,7 +93,7 @@ int popFront(Vector *v);
  * @param v
  * @param index
  * @param number
- * @return int 0 if successful, ERROR - if not
+ * @return int 0 if successful, VERROR - if not
  */
 int insert(Vector *v, int index, int number);
 
@@ -103,24 +103,15 @@ int insert(Vector *v, int index, int number);
  * @param v
  * @param index
  * @param number
- * @return int the number if usccesful, ERROR - if not
+ * @return int the number if usccesful, VERROR - if not
  */
 int remove(Vector *v, int index);
 
-// int main()
-// {
-//     Vector *v = initVector();
-//     // pushBack(v, 2);
-//     // pushBack(v, 3);
-//     print(v);
-//     return 0;
-// }
-
-struct vector_t *initVector()
+Vector* initVector()
 {
     Vector *v = new Vector();
     v->size = 0;
-    v->capacity = 2; // 5
+    v->capacity = 2;
     v->data = new int[v->capacity];
 
     return v;
@@ -128,11 +119,10 @@ struct vector_t *initVector()
 
 void pushBack(Vector *v, int number)
 {
-    if (v->size == v->capacity)
-    {
+    if (v->size == v->capacity) {
         resize(v);
     }
-    v->data[v->size++] = number; //++i i++
+    v->data[v->size++] = number;
 }
 
 void resize(Vector *v)
@@ -163,3 +153,63 @@ void print(Vector *v)
 }
 
 
+int at(Vector *v, int index) 
+{
+    if(v == NULL || index >= v->size || index < 0) {
+        return VERROR;
+    }
+    return v->data[index];
+}
+
+int pop(Vector *v) 
+{
+    if(v == NULL) 
+        return VERROR;
+    return remove(v, v->size - 1);
+}
+
+void destroy(Vector *v) 
+{
+    delete[] v->data;
+    v->data = NULL;
+
+    v->capacity = 0;
+    v->size = 0;
+}
+
+void pushFront(Vector *v, int number) 
+{
+    insert(v, 0, number);
+}
+
+int popFront(Vector *v) 
+{
+    return remove(v, 0);
+}
+
+int insert(Vector *v, int index, int number) 
+{
+    if (v->size == v->capacity) {
+        resize(v);
+    }
+    for(size_t i = v->size - 1; i > index; i--) {
+        v->data[i] = v->data[i-1];
+    }
+    return v->data[index] = number;
+}
+
+int remove(Vector *v, int index) 
+{
+    if(v == NULL || index < 0 || index >= v->size)
+        return VERROR;
+    size_t result = v->data[index];
+    for(size_t i = index; i < v->size - 1; i++) {
+        v->data[i] = v->data[i+1];
+    }
+    v->size--;
+    if(v->size < v->capacity / 4) {
+        v->capacity /= 4;
+        resize(v);
+    }
+    return result;
+}

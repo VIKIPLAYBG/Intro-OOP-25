@@ -2,6 +2,8 @@
 #include "../../../catch2/catch2.hpp"
 #include "../vector.cpp"
 
+using namespace std;
+
 TEST_CASE("Vector initialization", "[vector]")
 {
     Vector *v = initVector();
@@ -131,10 +133,10 @@ TEST_CASE("Vector at() function", "[vector]")
 
     SECTION("Edge cases")
     {
-        REQUIRE(at(v, -1) == ERROR);
-        REQUIRE(at(v, 0) == ERROR); // Empty vector
+        REQUIRE(at(v, -1) == VERROR);
+        REQUIRE(at(v, 0) == VERROR); // Empty vector
         pushBack(v, 10);
-        REQUIRE(at(v, 1) == ERROR); // Out of bounds
+        REQUIRE(at(v, 1) == VERROR); // Out of bounds
     }
 }
 
@@ -152,7 +154,7 @@ TEST_CASE("Vector pop() function", "[vector]")
 
     SECTION("Edge cases")
     {
-        REQUIRE(pop(v) == ERROR); // Empty vector
+        REQUIRE(pop(v) == VERROR); // Empty vector
     }
 }
 
@@ -194,7 +196,7 @@ TEST_CASE("Vector popFront() function", "[vector]")
 
     SECTION("Edge cases")
     {
-        REQUIRE(popFront(v) == ERROR); // Empty vector
+        REQUIRE(popFront(v) == VERROR); // Empty vector
     }
 }
 
@@ -214,10 +216,10 @@ TEST_CASE("Vector insert() function", "[vector]")
 
     SECTION("Edge cases")
     {
-        REQUIRE(insert(v, -1, 10) == ERROR); // Negative index
-        REQUIRE(insert(v, 1, 10) == ERROR);  // Out of bounds
+        REQUIRE(insert(v, -1, 10) == VERROR); // Negative index
+        REQUIRE(insert(v, 1, 10) == VERROR);  // Out of bounds
         pushBack(v, 10);
-        REQUIRE(insert(v, 2, 20) == ERROR); // Gap insertion
+        REQUIRE(insert(v, 2, 20) == VERROR); // Gap insertion
     }
 }
 
@@ -238,9 +240,9 @@ TEST_CASE("Vector remove() function", "[vector]")
 
     SECTION("Edge cases")
     {
-        REQUIRE(remove(v, 0) == ERROR); // Empty vector
+        REQUIRE(remove(v, 0) == VERROR); // Empty vector
         pushBack(v, 10);
-        REQUIRE(remove(v, -1) == ERROR); // Negative index
-        REQUIRE(remove(v, 1) == ERROR);  // Out of bounds
+        REQUIRE(remove(v, -1) == VERROR); // Negative index
+        REQUIRE(remove(v, 1) == VERROR);  // Out of bounds
     }
 }
