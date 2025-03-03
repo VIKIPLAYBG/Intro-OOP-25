@@ -2,30 +2,7 @@
 
 using namespace std;
 
-///////////////////////////////
-//* snake_case
-//* PascalCase
-//* camileCase
-//* kebab-case
-//////////////////////////////
-
-//////////////////////////////
-// Diff between i++ and ++i
-//////////////////////////////
-// int i++(int i)
-// {
-//     int tmp = i;
-//     i = i + 1;
-//     return tmp;
-// }
-
-// int ++i(int)
-// {
-//     return i + 1;
-// }
-//////////////////////////////
-
-int VERROR = -1;
+int V_ERROR = 2147483647;
 
 struct vector_t
 {
@@ -60,7 +37,7 @@ int at(Vector *v, int index);
  * @brief Pops the last element of the vector
  *
  * @param v
- * @return int if successful, VERROR - if not
+ * @return int if successful, V_ERROR - if not
  */
 int pop(Vector *v);
 
@@ -83,7 +60,7 @@ void pushFront(Vector *v, int number);
  * @brief Pops the first element of the vector
  *
  * @param v
- * @return int if successful, VERROR - if not
+ * @return int if successful, V_ERROR - if not
  */
 int popFront(Vector *v);
 
@@ -93,7 +70,7 @@ int popFront(Vector *v);
  * @param v
  * @param index
  * @param number
- * @return int 0 if successful, VERROR - if not
+ * @return int 0 if successful, V_ERROR - if not
  */
 int insert(Vector *v, int index, int number);
 
@@ -103,7 +80,7 @@ int insert(Vector *v, int index, int number);
  * @param v
  * @param index
  * @param number
- * @return int the number if usccesful, VERROR - if not
+ * @return int the number if usccesful, V_ERROR - if not
  */
 int remove(Vector *v, int index);
 
@@ -152,29 +129,30 @@ void print(Vector *v)
     cout << "]" << endl;
 }
 
+////////////////////////////////////////////////////////////////
 
 int at(Vector *v, int index) 
 {
     if(v == NULL || index >= v->size || index < 0) {
-        return VERROR;
+        return V_ERROR;
     }
     return v->data[index];
 }
 
 int pop(Vector *v) 
 {
-    if(v == NULL) 
-        return VERROR;
+    if(v == NULL || v->size == 0) 
+        return V_ERROR;
     return remove(v, v->size - 1);
 }
 
 void destroy(Vector *v) 
 {
     delete[] v->data;
-    v->data = NULL;
-
     v->capacity = 0;
     v->size = 0;
+    v->data = NULL;
+    delete v;
 }
 
 void pushFront(Vector *v, int number) 
@@ -189,26 +167,30 @@ int popFront(Vector *v)
 
 int insert(Vector *v, int index, int number) 
 {
+    if(index < 0 || index > v->size)
+        return V_ERROR;
     if (v->size == v->capacity) {
         resize(v);
     }
-    for(size_t i = v->size - 1; i > index; i--) {
+    for(size_t i = v->size; i > index; i--) {
         v->data[i] = v->data[i-1];
     }
-    return v->data[index] = number;
+    v->data[index] = number;
+    v->size++;
+    return 0;
 }
 
 int remove(Vector *v, int index) 
 {
     if(v == NULL || index < 0 || index >= v->size)
-        return VERROR;
+        return V_ERROR;
     size_t result = v->data[index];
     for(size_t i = index; i < v->size - 1; i++) {
         v->data[i] = v->data[i+1];
     }
     v->size--;
-    if(v->size < v->capacity / 4) {
-        v->capacity /= 4;
+    if(v->size < v->capacity / 4 && v->capacity > 2) {
+        v->capacity /= 2;
         resize(v);
     }
     return result;

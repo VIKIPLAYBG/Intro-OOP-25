@@ -15,8 +15,6 @@ TEST_CASE("Vector initialization", "[vector]")
         REQUIRE(v->capacity == 2);
         REQUIRE(v->data != nullptr);
     }
-
-    //
 }
 
 TEST_CASE("Vector push_back operations", "[vector]")
@@ -51,8 +49,6 @@ TEST_CASE("Vector push_back operations", "[vector]")
         REQUIRE(v->data[1] == 2);
         REQUIRE(v->data[2] == 3);
     }
-
-    //
 }
 
 TEST_CASE("Vector resize behavior", "[vector]")
@@ -75,8 +71,6 @@ TEST_CASE("Vector resize behavior", "[vector]")
         REQUIRE(v->data[1] == 200);
         REQUIRE(v->data[2] == 300);
     }
-
-    //
 }
 
 TEST_CASE("Vector print output", "[vector]")
@@ -115,8 +109,6 @@ TEST_CASE("Vector print output", "[vector]")
         REQUIRE(output.str().find("Vector's capacity: 2") != std::string::npos);
         REQUIRE(output.str().find("Vector's data: [1 2]") != std::string::npos);
     }
-
-    //
 }
 
 TEST_CASE("Vector at() function", "[vector]")
@@ -133,10 +125,10 @@ TEST_CASE("Vector at() function", "[vector]")
 
     SECTION("Edge cases")
     {
-        REQUIRE(at(v, -1) == VERROR);
-        REQUIRE(at(v, 0) == VERROR); // Empty vector
+        REQUIRE(at(v, -1) == V_ERROR);
+        REQUIRE(at(v, 0) == V_ERROR); // Empty vector
         pushBack(v, 10);
-        REQUIRE(at(v, 1) == VERROR); // Out of bounds
+        REQUIRE(at(v, 1) == V_ERROR); // Out of bounds
     }
 }
 
@@ -154,7 +146,7 @@ TEST_CASE("Vector pop() function", "[vector]")
 
     SECTION("Edge cases")
     {
-        REQUIRE(pop(v) == VERROR); // Empty vector
+        REQUIRE(pop(v) == V_ERROR); // Empty vector
     }
 }
 
@@ -196,7 +188,7 @@ TEST_CASE("Vector popFront() function", "[vector]")
 
     SECTION("Edge cases")
     {
-        REQUIRE(popFront(v) == VERROR); // Empty vector
+        REQUIRE(popFront(v) == V_ERROR); // Empty vector
     }
 }
 
@@ -216,10 +208,10 @@ TEST_CASE("Vector insert() function", "[vector]")
 
     SECTION("Edge cases")
     {
-        REQUIRE(insert(v, -1, 10) == VERROR); // Negative index
-        REQUIRE(insert(v, 1, 10) == VERROR);  // Out of bounds
+        REQUIRE(insert(v, -1, 10) == V_ERROR); // Negative index
+        REQUIRE(insert(v, 1, 10) == V_ERROR);  // Out of bounds
         pushBack(v, 10);
-        REQUIRE(insert(v, 2, 20) == VERROR); // Gap insertion
+        REQUIRE(insert(v, 2, 20) == V_ERROR); // Gap insertion
     }
 }
 
@@ -240,9 +232,9 @@ TEST_CASE("Vector remove() function", "[vector]")
 
     SECTION("Edge cases")
     {
-        REQUIRE(remove(v, 0) == VERROR); // Empty vector
+        REQUIRE(remove(v, 0) == V_ERROR); // Empty vector
         pushBack(v, 10);
-        REQUIRE(remove(v, -1) == VERROR); // Negative index
-        REQUIRE(remove(v, 1) == VERROR);  // Out of bounds
+        REQUIRE(remove(v, -1) == V_ERROR); // Negative index
+        REQUIRE(remove(v, 1) == V_ERROR);  // Out of bounds
     }
 }
