@@ -4,6 +4,8 @@
 
 using namespace std;
 
+//initVector() Tests:
+
 TEST_CASE("Vector initialization", "[vector]")
 {
     Vector *v = initVector();
@@ -16,6 +18,8 @@ TEST_CASE("Vector initialization", "[vector]")
         REQUIRE(v->data != nullptr);
     }
 }
+
+//pushBack() Tests:
 
 TEST_CASE("Vector push_back operations", "[vector]")
 {
@@ -51,6 +55,8 @@ TEST_CASE("Vector push_back operations", "[vector]")
     }
 }
 
+//resize() Tests:
+
 TEST_CASE("Vector resize behavior", "[vector]")
 {
     Vector *v = initVector();
@@ -72,6 +78,8 @@ TEST_CASE("Vector resize behavior", "[vector]")
         REQUIRE(v->data[2] == 300);
     }
 }
+
+//print() Tests:
 
 TEST_CASE("Vector print output", "[vector]")
 {
@@ -111,6 +119,8 @@ TEST_CASE("Vector print output", "[vector]")
     }
 }
 
+//at() Tests:
+
 TEST_CASE("Vector at() function", "[vector]")
 {
     Vector *v = initVector();
@@ -132,6 +142,8 @@ TEST_CASE("Vector at() function", "[vector]")
     }
 }
 
+//pop() Tests:
+
 TEST_CASE("Vector pop() function", "[vector]")
 {
     Vector *v = initVector();
@@ -149,6 +161,8 @@ TEST_CASE("Vector pop() function", "[vector]")
         REQUIRE(pop(v) == V_ERROR); // Empty vector
     }
 }
+
+//pushFront() Tests:
 
 TEST_CASE("Vector pushFront() function", "[vector]")
 {
@@ -173,6 +187,8 @@ TEST_CASE("Vector pushFront() function", "[vector]")
     }
 }
 
+//popFront() Tests:
+
 TEST_CASE("Vector popFront() function", "[vector]")
 {
     Vector *v = initVector();
@@ -191,6 +207,8 @@ TEST_CASE("Vector popFront() function", "[vector]")
         REQUIRE(popFront(v) == V_ERROR); // Empty vector
     }
 }
+
+//insert() Tests:
 
 TEST_CASE("Vector insert() function", "[vector]")
 {
@@ -214,6 +232,8 @@ TEST_CASE("Vector insert() function", "[vector]")
         REQUIRE(insert(v, 2, 20) == V_ERROR); // Gap insertion
     }
 }
+
+//remove() Tests:
 
 TEST_CASE("Vector remove() function", "[vector]")
 {
