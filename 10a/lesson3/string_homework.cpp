@@ -53,10 +53,7 @@ public:
      * @return size_t
      */
     size_t length() const {
-        size_t len = 0;
-        for(size_t i = 0; data[i] != '\0'; i++)
-            len++;
-        return len;
+        return size;
     }
 
     /**
@@ -66,10 +63,7 @@ public:
      */
     void append(char ch) {
         data[size++] = ch;
-        if(ch != '\0')
-            data[size] = '\0';
-        else
-            return;
+        data[size] = '\0';
     }
 
     /**
