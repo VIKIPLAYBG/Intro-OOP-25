@@ -69,7 +69,7 @@ public:
         if(ch != '\0')
             data[size] = '\0';
         else
-            data[size++] = ch;
+            return;
     }
 
     /**
@@ -97,6 +97,12 @@ public:
             if(data[i] > other.data[i])
                 return 1;
             i++;
+        }
+        if (data[i] == '\0' && other.data[i] != '\0') {
+            return -1;
+        }
+        if (data[i] != '\0' && other.data[i] == '\0') {
+            return 1;
         }
         return 0;
     }
