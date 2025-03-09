@@ -2,12 +2,16 @@
 #include "../../../catch2/catch2.hpp"
 #include "../string_homework.cpp"
 
+//Default Constructor Tests:
+
 TEST_CASE("Default Constructor", "[string]")
 {
     String s;
     REQUIRE(s.length() == 0);
     REQUIRE(strcmp(s.toCString(), "") == 0);
 }
+
+//Char* Constructor Tests:
 
 TEST_CASE("C-string Constructor", "[string]")
 {
@@ -32,6 +36,8 @@ TEST_CASE("C-string Constructor", "[string]")
         REQUIRE(strcmp(s.toCString(), "a") == 0);
     }
 }
+
+//append() Tests:
 
 TEST_CASE("append() Method", "[string]")
 {
@@ -60,6 +66,8 @@ TEST_CASE("append() Method", "[string]")
     }
 }
 
+//concat() Tests:
+
 TEST_CASE("concat() Method", "[string]")
 {
     SECTION("Concat to empty string")
@@ -86,6 +94,8 @@ TEST_CASE("concat() Method", "[string]")
         REQUIRE(strcmp(s.toCString(), "hello world") == 0);
     }
 }
+
+//compare() Tests:
 
 TEST_CASE("compare() Method", "[string]")
 {
