@@ -2,6 +2,8 @@
 #include "../../../catch2/catch2.hpp"
 #include "../string_homework2.cpp"
 
+//Copy Constructor Tests:
+
 TEST_CASE("Copy constructor functionality", "[String]")
 {
     SECTION("Copy empty string")
@@ -21,6 +23,8 @@ TEST_CASE("Copy constructor functionality", "[String]")
         REQUIRE(copy.toCString() != original.toCString()); // Different memory addresses
     }
 }
+
+//&operator=() Tests:
 
 TEST_CASE("Assignment operator functionality", "[String]")
 {
@@ -47,6 +51,8 @@ TEST_CASE("Assignment operator functionality", "[String]")
         REQUIRE(strcmp(str.toCString(), "test") == 0);
     }
 }
+
+//&insert() Tests:
 
 TEST_CASE("Insert method functionality", "[String]")
 {
@@ -79,6 +85,8 @@ TEST_CASE("Insert method functionality", "[String]")
     }
 }
 
+//&replace() Tests:
+
 TEST_CASE("Replace method functionality", "[String]")
 {
     SECTION("Replace first character")
@@ -109,6 +117,8 @@ TEST_CASE("Replace method functionality", "[String]")
         REQUIRE(strcmp(str.toCString(), "hello") == 0);
     }
 }
+
+//findFirstOf() Tests:
 
 TEST_CASE("FindFirstOf method functionality", "[String]")
 {

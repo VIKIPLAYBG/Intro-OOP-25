@@ -46,8 +46,14 @@ public:
      * @param other
      */
     String(const String &other) {
-        this->data = other.data;
-        this->size = other.size;
+        if(this != &other) {
+            this->data = new char[other.size + 1]; 
+            for(size_t i = 0; i < other.size; i++) {
+                this->data[i] = other.data[i];
+            }
+            this->data[other.size] = '\0';
+            this->size = other.size;
+        }
     }
 
     /**
@@ -58,8 +64,15 @@ public:
      * @return String&
      */
     String &operator=(const String &other) {
-        this->data = other.data;
-        this->size = other.size;
+        if(this != &other) {
+            delete[] this->data;
+            this->data = new char[other.size + 1]; 
+            for(size_t i = 0; i < other.size; i++) {
+                this->data[i] = other.data[i];
+            }
+            this->data[other.size] = '\0';
+            this->size = other.size;
+        }
         return *this;
     }
 
@@ -72,9 +85,8 @@ public:
      * @return String&
      */
     String &insert(size_t index, char c) {
-        if(index < 0 || index > size)
-            cout << "Ni staa brat" << endl;
-            exit(1);
+        if(index > size)
+            return *this;
         for(size_t i = size; i > index; i--) {
             data[i] = data[i-1];
         }
@@ -107,7 +119,7 @@ public:
      * @return int
      */
     int findFirstOf(char c) const {
-        for(int i = 0; data[i] != '\0'; i++) {
+        for(size_t i = 0; data[i] != '\0'; i++) {
             if(data[i] == c)
                 return i;
         }
@@ -148,21 +160,9 @@ public:
      *
      * @param ch
      */
-    void append(char ch)
-    {
-        char *newData = new char[size + 2];
-
-        for (size_t i = 0; i < size; i++)
-        {
-            newData[i] = data[i];
-        }
-
-        newData[size] = ch;
-        newData[size + 1] = '\0';
-
-        delete[] data;
-        data = newData;
-        size++;
+    void append(char ch) {
+        data[size++] = ch;
+        data[size] = '\0';
     }
 
     /**
@@ -182,22 +182,21 @@ public:
      * @param other
      * @return int 0 if the strings are equal, 1 if the current string is greater, -1 if the current string is smaller
      */
-    int compare(const String &other) const
-    {
-        size_t minLen = size < other.size ? size : other.size;
-
-        for (size_t i = 0; i < minLen; i++)
-        {
-            if (data[i] < other.data[i])
+    int compare(const String &other) const {
+        size_t i = 0;
+        while(data[i] != '\0' && other.data[i] != '\0') {
+            if(data[i] < other.data[i])
                 return -1;
-            if (data[i] > other.data[i])
+            if(data[i] > other.data[i])
                 return 1;
+            i++;
         }
-
-        if (size < other.size)
+        if (data[i] == '\0' && other.data[i] != '\0') {
             return -1;
-        if (size > other.size)
+        }
+        if (data[i] != '\0' && other.data[i] == '\0') {
             return 1;
+        }
         return 0;
     }
 };
