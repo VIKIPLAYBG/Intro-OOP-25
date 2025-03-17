@@ -45,7 +45,10 @@ public:
      *
      * @param other
      */
-    String(const String &other);
+    String(const String &other) {
+        this->data = other.data;
+        this->size = other.size;
+    }
 
     /**
      * TODO: Implement the assignment operator
@@ -54,7 +57,11 @@ public:
      * @param other
      * @return String&
      */
-    String &operator=(const String &other);
+    String &operator=(const String &other) {
+        this->data = other.data;
+        this->size = other.size;
+        return *this;
+    }
 
     /**
      * TODO: Implement the insert method
@@ -64,7 +71,17 @@ public:
      * @param c
      * @return String&
      */
-    String &insert(size_t index, char c);
+    String &insert(size_t index, char c) {
+        if(index < 0 || index > size)
+            cout << "Ni staa brat" << endl;
+            exit(1);
+        for(size_t i = size; i > index; i--) {
+            data[i] = data[i-1];
+        }
+        data[index] = c;
+        size++;
+        return *this;
+    }
 
     /**
      * TODO: Implement the replace method
@@ -74,7 +91,13 @@ public:
      * @param c
      * @return String&
      */
-    String &replace(size_t index, char c);
+    String &replace(size_t index, char c) {
+        if(index > size)
+            return *this;
+
+        data[index] = c;
+        return *this;
+    }
 
     /**
      * TODO: Implement the findFirstOf method
@@ -83,7 +106,13 @@ public:
      * @param c
      * @return int
      */
-    int findFirstOf(char c) const;
+    int findFirstOf(char c) const {
+        for(int i = 0; data[i] != '\0'; i++) {
+            if(data[i] == c)
+                return i;
+        }
+        return -1;
+    }
 
     /**
      * @brief Destroy the String object
@@ -141,29 +170,10 @@ public:
      *
      * @param str
      */
-    void concat(const char *str)
-    {
-        size_t strLen = 0;
-        while (str[strLen] != '\0')
-        {
-            strLen++;
+    void concat(const char *str) {
+        for(int i = 0; str[i] != '\0'; i++) {
+            append(str[i]);
         }
-
-        char *newData = new char[size + strLen + 1];
-
-        for (size_t i = 0; i < size; i++)
-        {
-            newData[i] = data[i];
-        }
-
-        for (size_t i = 0; i <= strLen; i++)
-        {
-            newData[size + i] = str[i];
-        }
-
-        delete[] data;
-        data = newData;
-        size += strLen;
     }
 
     /**
