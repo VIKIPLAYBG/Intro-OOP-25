@@ -36,15 +36,15 @@ public:
     }
 
     size_t getSize() const {
-        return this->size;
+        return size;
     }
 
     size_t getCapacity() const {
-        return this->capacity;
+        return capacity;
     }
 
     int getId() const {
-        return this->id;
+        return id;
     }
 
     void pushBack(int number) {
