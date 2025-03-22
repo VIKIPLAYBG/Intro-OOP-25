@@ -22,9 +22,13 @@ class Vector
 
 public:
     Vector(int id, int capacity)
-    :id(id), data(new int[capacity]) {
-        if(capacity < 1)
-        throw invalid_argument("The value must be positive.");
+    : id(id), capacity(capacity), data(nullptr), size(0) {
+    if (capacity < 1)
+        throw invalid_argument("Capacity must be positive.");
+    if (id < 1)
+        throw invalid_argument("ID must be positive.");
+
+    data = new int[capacity];
     }
 
     ~Vector() {
@@ -32,35 +36,32 @@ public:
     }
 
     size_t getSize() const {
-        if(data == NULL)
-            return 0;
-        return size;
+        return this->size;
     }
 
     size_t getCapacity() const {
-        if(data == NULL)
-            return 0;
-        return capacity;
+        return this->capacity;
     }
 
     int getId() const {
-        return id;
+        return this->id;
     }
 
     void pushBack(int number) {
-        insert(size - 1, number);
+        insert(size, number);
     }
 
     int at(int index) const {
-        if(data == NULL || index >= size || index < 0) {
-            throw invalid_argument("Index is Out of Range.");
+        if(this == nullptr || index >= size || index < 0) {
+            throw out_of_range("Index is Out of Range.");
         }
         return data[index];
     }
 
     int insert(int index, int number) {
-        if(index < 0 || index > size)
-            throw invalid_argument("Index is Out of Range.");
+        if(index < 0 || index > size) {
+            throw out_of_range("Index is Out of Range.");
+        }
         if (size == capacity) {
             resize();
         }
@@ -73,8 +74,8 @@ public:
     }
 
     int remove(int index) {
-        if(data == NULL || index < 0 || index >= size)
-            throw invalid_argument("Index is Out of Range.");
+        if(this == nullptr || index < 0 || index >= size)
+            throw out_of_range("Index is Out of Range.");
         size_t result = data[index];
         for(size_t i = index; i < size - 1; i++) {
             data[i] = data[i+1];
@@ -88,8 +89,8 @@ public:
     }
 
     int pop() {
-        if(data == NULL || size == 0)
-            throw invalid_argument("The Vector is empty!");
+        if(this == nullptr || size == 0)
+            throw out_of_range("Index is Out of Range.");    
         return remove(size - 1);
     }
 };
