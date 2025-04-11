@@ -2,6 +2,8 @@
 #include "../../../catch2/catch2.hpp"
 #include "../homework.cpp"
 
+// Animal() Tests:
+
 TEST_CASE("Animal Constructor", "[animal]")
 {
     SECTION("Valid parameters")
@@ -21,6 +23,8 @@ TEST_CASE("Animal Constructor", "[animal]")
     }
 }
 
+// Animal setName() Tests:
+
 TEST_CASE("Animal setName", "[animal]")
 {
     Animal animal("Buddy", 5, 10.5);
@@ -36,6 +40,8 @@ TEST_CASE("Animal setName", "[animal]")
         REQUIRE_THROWS_AS(animal.setName(""), invalid_argument);
     }
 }
+
+// Animal setAge() Tests:
 
 TEST_CASE("Animal setAge", "[animal]")
 {
@@ -59,6 +65,8 @@ TEST_CASE("Animal setAge", "[animal]")
     }
 }
 
+// Animal setWeight() Tests:
+
 TEST_CASE("Animal setWeight", "[animal]")
 {
     Animal animal("Buddy", 5, 10.5);
@@ -81,6 +89,8 @@ TEST_CASE("Animal setWeight", "[animal]")
     }
 }
 
+// Animal feed() and sleep() Tests:
+
 TEST_CASE("Animal feed and sleep", "[animal]")
 {
     Animal animal("Buddy", 5, 10.5);
@@ -102,6 +112,8 @@ TEST_CASE("Animal feed and sleep", "[animal]")
     }
 }
 
+// Dog() Tests:
+
 TEST_CASE("Dog Constructor", "[dog]")
 {
     SECTION("Valid parameters")
@@ -119,6 +131,8 @@ TEST_CASE("Dog Constructor", "[dog]")
     }
 }
 
+// Dog setBreed() Tests:
+
 TEST_CASE("Dog setBreed", "[dog]")
 {
     Dog dog("Rex", 3, 20.5, "Labrador");
@@ -134,6 +148,8 @@ TEST_CASE("Dog setBreed", "[dog]")
         REQUIRE_THROWS_AS(dog.setBreed(""), invalid_argument);
     }
 }
+
+// Dog bark() and wagTail() Tests:
 
 TEST_CASE("Dog behavior methods", "[dog]")
 {
@@ -163,6 +179,8 @@ TEST_CASE("Dog behavior methods", "[dog]")
     }
 }
 
+// Cat() Tests:
+
 TEST_CASE("Cat Constructor", "[cat]")
 {
     SECTION("Valid parameters")
@@ -175,6 +193,8 @@ TEST_CASE("Cat Constructor", "[cat]")
         REQUIRE(cat.getLivesLeft() == 9);
     }
 }
+
+// Cat meow() and purr() Tests:
 
 TEST_CASE("Cat behavior methods", "[cat]")
 {
@@ -202,6 +222,8 @@ TEST_CASE("Cat behavior methods", "[cat]")
         cout.rdbuf(old_buf);
     }
 }
+
+// Cat setIsIndoor() Tests:
 
 TEST_CASE("Cat setIsIndoor", "[cat]")
 {
