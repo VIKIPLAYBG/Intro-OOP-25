@@ -31,13 +31,13 @@ public:
      * */
     Animal(const string &name, int age, double weight) {
         if(name.empty())
-            throw invalid_argument("Name is empty");
+            throw invalid_argument("Name (Constructor) is empty");
         this->name = name;
         if(age < 0)
-            throw invalid_argument("Age must be non-negative");
+            throw invalid_argument("Age (Constructor) must be non-negative");
         this->age = age;
         if(weight < 0)
-            throw invalid_argument("Weight must be non-negative");
+            throw invalid_argument("Weight (Constructor) must be non-negative");
         this->weight = weight;
         this->isHungry = false;
     }
@@ -68,12 +68,18 @@ public:
      * @note The setters check for valid input and throw exceptions if any
      */
     void setName(const string &name) {
+        if(name.empty())
+            throw invalid_argument("Name (Setter) is empty");
         this->name = name;
     }
     void setAge(int age) {
+        if(age < 0)
+            throw invalid_argument("Age (Setter) must be non-negative");
         this->age = age;
     }
     void setWeight(double weight) {
+        if(weight < 0)
+            throw invalid_argument("Weight (Setter) must be non-negative");
         this->weight = weight;
     }
 
