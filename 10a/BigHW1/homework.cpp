@@ -1,52 +1,30 @@
 #include <iostream>
+#include <cstring>
+#include <vector>
 #include <cmath>
 
 using namespace std;
 
 class Operation {
-
 protected:
     string name;
     string symbol;
 
-    void const setName(string name) {
-        if(name.empty())
-            throw invalid_argument("(Set Name) Name is Empty!");
-        this->name = name;
-    }
-
-    void const setSymbol(string symbol) {
-        if(symbol.empty())
-            throw invalid_argument("(Set Symbol) Symbol is Empty!");
-        this->symbol = symbol;
-    }
-
 public:
-
-    Operation(string name, string symbol) {
-        if(name.empty())
-            throw invalid_argument("(Original Para Constructor) Name is Empty!");
-        if(symbol.empty())
-            throw invalid_argument("(Original Para Constructor) Symbol is Empty!");
+    Operation(const string& name, const string& symbol) {
+        setName(name);
+        setSymbol(symbol);
     }
 
-    Operation(Operation &other) {
-        if(other.name.empty())
-            throw invalid_argument("(Original Copy Constructor) Name is Empty!");
-        if(other.symbol.empty())
-            throw invalid_argument("(Original Copy Constructor) Symbol is Empty!");
-        this->name = other.name;
-        this->symbol = other.symbol;
+    Operation(const Operation& other) {
+        setName(other.name);
+        setSymbol(other.symbol);
     }
 
-    Operation &operator=(Operation &other) {
-        if(this != &other) {
-            if(other.name.empty())
-                throw invalid_argument("(Original Operator=) Name is Empty!");
-            if(other.symbol.empty())
-                throw invalid_argument("(Original Operator=) Symbol is Empty!");
-            this->name = other.name;
-            this->symbol = other.symbol;
+    Operation& operator=(const Operation& other) {
+        if (this != &other) {
+            setName(other.name);
+            setSymbol(other.symbol);
         }
         return *this;
     }
@@ -56,223 +34,316 @@ public:
     }
 
     string getSymbol() const {
-        return name;
+        return symbol;
     }
 
-    virtual double execute(const double n1, const double n2) const {}
+    void setName(const string& name) {
+        if (name.empty())
+            throw invalid_argument("Name is Empty!");
+        this->name = name;
+    }
 
+    void setSymbol(const string& symbol) {
+        if (symbol.empty())
+            throw invalid_argument("Symbol is Empty!");
+        this->symbol = symbol;
+    }
+
+    virtual double execute(const double n1, const double n2) const = 0;
+
+    virtual ~Operation() = default;
 };
 
-class AddOperation : Operation {
-
+class AddOperation : public Operation {
 public:
-    AddOperation() : Operation(name, symbol) {
-        if(name.empty())
-            throw invalid_argument("(AddOperation Default Constructor) Name is Empty!");
-        if(symbol.empty())
-            throw invalid_argument("(AddOperation Default Constructor) Symbol is Empty!");
-    }
-
-    AddOperation(AddOperation &other) : Operation(other) {
-        if(other.name.empty())
-            throw invalid_argument("(Original Copy Constructor) Name is Empty!");
-        if(other.symbol.empty())
-            throw invalid_argument("(Original Copy Constructor) Symbol is Empty!");
-        this->name = other.name;
-        this->symbol = other.symbol;
-    }
-
-    AddOperation &operator=(AddOperation &other) {
-        if(this != &other)
-            Operation::operator=(other);
+    AddOperation() : Operation("add", "+") {}
+    AddOperation(const AddOperation& other) : Operation(other) {}
+    AddOperation& operator=(const AddOperation& other) {
+        Operation::operator=(other);
         return *this;
     }
-
     double execute(const double n1, const double n2) const override {
         return n1 + n2;
     }
 };
 
-class SubtractOperation : Operation {
-
+class SubtractOperation : public Operation {
 public:
-    SubtractOperation() : Operation(name, symbol) {
-        if(name.empty())
-            throw invalid_argument("(AddOperation Default Constructor) Name is Empty!");
-        if(symbol.empty())
-            throw invalid_argument("(AddOperation Default Constructor) Symbol is Empty!");
-    }
-
-    SubtractOperation(SubtractOperation &other) : Operation(other) {
-        if(other.name.empty())
-            throw invalid_argument("(Original Copy Constructor) Name is Empty!");
-        if(other.symbol.empty())
-            throw invalid_argument("(Original Copy Constructor) Symbol is Empty!");
-        this->name = other.name;
-        this->symbol = other.symbol;
-    }
-
-    SubtractOperation &operator=(SubtractOperation &other) {
-        if(this != &other)
-            Operation::operator=(other);
+    SubtractOperation() : Operation("subtract", "-") {}
+    SubtractOperation(const SubtractOperation& other) : Operation(other) {}
+    SubtractOperation& operator=(const SubtractOperation& other) {
+        Operation::operator=(other);
         return *this;
     }
-
     double execute(const double n1, const double n2) const override {
         return n1 - n2;
     }
 };
 
-class MultiplyOperation : Operation {
-
+class MultiplyOperation : public Operation {
 public:
-    MultiplyOperation() : Operation(name, symbol) {
-        if(name.empty())
-            throw invalid_argument("(AddOperation Default Constructor) Name is Empty!");
-        if(symbol.empty())
-            throw invalid_argument("(AddOperation Default Constructor) Symbol is Empty!");
-    }
-
-    MultiplyOperation(MultiplyOperation &other) : Operation(other) {
-        if(other.name.empty())
-            throw invalid_argument("(Original Copy Constructor) Name is Empty!");
-        if(other.symbol.empty())
-            throw invalid_argument("(Original Copy Constructor) Symbol is Empty!");
-        this->name = other.name;
-        this->symbol = other.symbol;
-    }
-
-    MultiplyOperation &operator=(MultiplyOperation &other) {
-        if(this != &other)
-            Operation::operator=(other);
+    MultiplyOperation() : Operation("multiply", "*") {}
+    MultiplyOperation(const MultiplyOperation& other) : Operation(other) {}
+    MultiplyOperation& operator=(const MultiplyOperation& other) {
+        Operation::operator=(other);
         return *this;
     }
-
     double execute(const double n1, const double n2) const override {
         return n1 * n2;
     }
 };
 
-class DivideOperation : Operation {
-
+class DivideOperation : public Operation {
 public:
-    DivideOperation() : Operation(name, symbol) {
-        if(name.empty())
-            throw invalid_argument("(AddOperation Default Constructor) Name is Empty!");
-        if(symbol.empty())
-            throw invalid_argument("(AddOperation Default Constructor) Symbol is Empty!");
-    }
-
-    DivideOperation(DivideOperation &other) : Operation(other) {
-        if(other.name.empty())
-            throw invalid_argument("(Original Copy Constructor) Name is Empty!");
-        if(other.symbol.empty())
-            throw invalid_argument("(Original Copy Constructor) Symbol is Empty!");
-        this->name = other.name;
-        this->symbol = other.symbol;
-    }
-
-    DivideOperation &operator=(DivideOperation &other) {
-        if(this != &other)
-            Operation::operator=(other);
+    DivideOperation() : Operation("divide", "/") {}
+    DivideOperation(const DivideOperation& other) : Operation(other) {}
+    DivideOperation& operator=(const DivideOperation& other) {
+        Operation::operator=(other);
         return *this;
     }
-
     double execute(const double n1, const double n2) const override {
+        if (n2 == 0)
+            throw invalid_argument("Cannot divide by zero.");
         return n1 / n2;
     }
 };
 
-class PowerOperation : Operation {
-
+class PowerOperation : public Operation {
 public:
-    PowerOperation() : Operation(name, symbol) {
-        if(name.empty())
-            throw invalid_argument("(AddOperation Default Constructor) Name is Empty!");
-        if(symbol.empty())
-            throw invalid_argument("(AddOperation Default Constructor) Symbol is Empty!");
-    }
-
-    PowerOperation(PowerOperation &other) : Operation(other) {
-        if(other.name.empty())
-            throw invalid_argument("(Original Copy Constructor) Name is Empty!");
-        if(other.symbol.empty())
-            throw invalid_argument("(Original Copy Constructor) Symbol is Empty!");
-        this->name = other.name;
-        this->symbol = other.symbol;
-    }
-
-    PowerOperation &operator=(PowerOperation &other) {
-        if(this != &other)
-            Operation::operator=(other);
+    PowerOperation() : Operation("power", "^") {}
+    PowerOperation(const PowerOperation& other) : Operation(other) {}
+    PowerOperation& operator=(const PowerOperation& other) {
+        Operation::operator=(other);
         return *this;
     }
-
     double execute(const double n1, const double n2) const override {
         return pow(n1, n2);
     }
 };
 
-class RootOperation : Operation {
-
+class RootOperation : public Operation {
 public:
-    RootOperation() : Operation(name, symbol) {
-        if(name.empty())
-            throw invalid_argument("(AddOperation Default Constructor) Name is Empty!");
-        if(symbol.empty())
-            throw invalid_argument("(AddOperation Default Constructor) Symbol is Empty!");
-    }
-
-    RootOperation(RootOperation &other) : Operation(other) {
-        if(other.name.empty())
-            throw invalid_argument("(Original Copy Constructor) Name is Empty!");
-        if(other.symbol.empty())
-            throw invalid_argument("(Original Copy Constructor) Symbol is Empty!");
-        this->name = other.name;
-        this->symbol = other.symbol;
-    }
-
-    RootOperation &operator=(RootOperation &other) {
-        if(this != &other)
-            Operation::operator=(other);
+    RootOperation() : Operation("root", "v") {}
+    RootOperation(const RootOperation& other) : Operation(other) {}
+    RootOperation& operator=(const RootOperation& other) {
+        Operation::operator=(other);
         return *this;
     }
-
     double execute(const double n1, const double n2) const override {
-        if(n1 < 0)
-            throw invalid_argument("(Root Operation) Underlying Magnitude is less than 0! (Inaccessible Values)");
-        return pow(n1, 1/n2);
+        if (n1 < 0 || n2 <= 0)
+            throw invalid_argument("Invalid input for root.");
+        return pow(n1, 1 / n2);
     }
 };
 
 class Calculator {
-    const char* name;
+    string name;
     size_t numberOfSupportedOperations;
     size_t capacityForOperations;
     Operation** operations;
     static double numberOfSuccessfulCalculations;
+    vector<string> inputHistory;
 
 public:
-
-    Calculator(const char* name, size_t n, Operation** operations) {
-
+    Calculator() {
+        this->name = "\0";
+        this->capacityForOperations = 2;
+        this->numberOfSupportedOperations = 0;
+        this->operations = new Operation*[capacityForOperations];
     }
 
-    Calculator(const Calculator &other) {
+    Calculator(string name, size_t n, Operation** operations) {
+        if (name.empty())
+            throw invalid_argument("(Calculator Para Constructor) Name is Empty!");
+        this->name = name;
 
+        if (n < 1)
+            throw invalid_argument("(Calculator Para Constructor) Capacity is Empty!");
+        this->capacityForOperations = n;
+        this->numberOfSupportedOperations = n;
+
+        this->operations = new Operation*[this->capacityForOperations];
+
+        for (size_t i = 0; i < n; i++) {
+            this->operations[i] = operations[i];
+        }
     }
 
-    const Calculator &operator=(const Calculator &other) {
+    Calculator(const Calculator& other) {
+        if (other.name.empty())
+            throw invalid_argument("(Calculator Copy Constructor) Name is Empty!");
+        this->name = other.name;
 
+        if (other.capacityForOperations < 1)
+            throw invalid_argument("(Calculator Copy Constructor) Capacity is Empty!");
+        this->capacityForOperations = other.capacityForOperations;
+
+        for (int i = 0; i < capacityForOperations; i++) {
+            this->operations[i] = other.operations[i];
+        }
+    }
+
+    const Calculator& operator=(const Calculator& other) {
+        if (this != &other) {
+            if (other.name.empty())
+                throw invalid_argument("(Calculator Operator=) Name is Empty!");
+            this->name = name;
+
+            if (other.capacityForOperations < 1)
+                throw invalid_argument("(Calculator Operator=) Capacity is Empty!");
+            this->capacityForOperations = other.capacityForOperations;
+
+            this->operations = new Operation*[capacityForOperations];
+            for (int i = 0; i < capacityForOperations; i++) {
+                this->operations[i] = other.operations[i];
+            }
+        }
+        return *this;
     }
 
     ~Calculator() {
-
+        for (size_t i = 0; i < numberOfSupportedOperations; i++) {
+            delete operations[i];
+        }
+        delete[] operations;
     }
 
     void listSupportedOperations() {
+        cout << "Supported Operations:\n";
+        for (size_t i = 0; i < numberOfSupportedOperations; i++) {
+            cout << operations[i]->getSymbol() << " - " << operations[i]->getName() << endl;
+        }
+    }
 
+    void listInputFormat() {
+        cout << "Input Format: ";
+        for (auto item : inputHistory) {
+            cout << item << " ";
+        }
+        cout << "= \n";
+    }
+
+    Calculator& addOperation(Operation* op) {
+        if (numberOfSupportedOperations >= capacityForOperations) {
+            capacityForOperations *= 2;
+            Operation** newOperations = new Operation*[capacityForOperations];
+            for (size_t i = 0; i < numberOfSupportedOperations; i++) {
+                newOperations[i] = operations[i];
+            }
+            delete[] operations;
+            operations = newOperations;
+        }
+        operations[numberOfSupportedOperations++] = op;
+        return *this;
+    }
+
+    void startCalculation() {
+        try {
+            double result;
+            cin >> result;
+            inputHistory.push_back(to_string(result));
+
+            string op;
+            while (true) {
+                cin >> op;
+
+                if (op == "=") {
+                    cout << result << endl;
+                    numberOfSuccessfulCalculations++;
+                    return;
+                }
+
+                double nextNum;
+                cin >> nextNum;
+                inputHistory.push_back(op);
+                inputHistory.push_back(to_string(nextNum));
+
+                Operation* operation = nullptr;
+                for (size_t i = 0; i < numberOfSupportedOperations; i++) {
+                    if (operations[i]->getSymbol() == op) {
+                        operation = operations[i];
+                        break;
+                    }
+                }
+
+                if (operation)
+                    result = operation->execute(result, nextNum);
+                else
+                    throw invalid_argument("Unsupported operation");
+            }
+        } catch (const exception& e) {
+            cout << "Error: " << e.what() << endl;
+        }
+    }
+
+    double getNumOfSuccessfulCalculations() {
+        return numberOfSuccessfulCalculations;
     }
 };
 
-//Main!!!
+double Calculator::numberOfSuccessfulCalculations = 0;
+
+int main() {
+    string name;
+    cout << "Enter the calculator's name: ";
+    cin >> name;
+
+    size_t n;
+    cout << "Enter the number of operations: ";
+    cin >> n;
+
+    cin.ignore();
+
+    Operation** operations = new Operation*[n];
+    cout << "Enter the Operations: " << endl;
+    for (size_t i = 0; i < n; i++) {
+        string op_name;
+        string op_symbol;
+        cout << "Enter the name for operation " << i + 1 << ": ";
+        cin >> op_name;
+        cout << "Enter the symbol for operation " << i + 1 << ": ";
+        cin >> op_symbol;
+        if(op_symbol == "+")
+            operations[i] = new AddOperation();
+        if(op_symbol == "-")
+            operations[i] = new SubtractOperation();
+        if(op_symbol == "*")
+            operations[i] = new MultiplyOperation();
+        if(op_symbol == "/")
+            operations[i] = new DivideOperation();
+        if(op_symbol == "^")
+            operations[i] = new PowerOperation();
+        if(op_symbol == "v")
+            operations[i] = new RootOperation();
+        operations[i]->setName(op_name);
+        operations[i]->setSymbol(op_symbol);
+    }
+
+    Calculator calc(name, n, operations);
+
+    int choice;
+    do {
+        cout << "1. List supported Operations" << endl;
+        cout << "2. List input format" << endl;
+        cout << "3. Start calculation" << endl;
+        cout << "4. Exit" << endl;
+        cout << "Choose option: ";
+
+        cin >> choice;
+
+        if (choice == 1) {
+            calc.listSupportedOperations();
+        } else if (choice == 2) {
+            calc.listInputFormat();
+        } else if (choice == 3) {
+            calc.startCalculation();
+        } else if (choice == 4) {
+            cout << "Exiting program..." << endl;
+            break;
+        } else {
+            cout << "Invalid option! Please try again." << endl;
+        }
+    } while (choice != 4);
+
+    return 0;
+}
