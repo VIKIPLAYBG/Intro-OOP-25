@@ -56,7 +56,7 @@ public:
 
 class AddOperation : public Operation {
 public:
-    AddOperation() : Operation("add", "+") {}
+    AddOperation() : Operation("Add", "+") {}
     AddOperation(const AddOperation& other) : Operation(other) {}
     AddOperation& operator=(const AddOperation& other) {
         Operation::operator=(other);
@@ -69,7 +69,7 @@ public:
 
 class SubtractOperation : public Operation {
 public:
-    SubtractOperation() : Operation("subtract", "-") {}
+    SubtractOperation() : Operation("Subtract", "-") {}
     SubtractOperation(const SubtractOperation& other) : Operation(other) {}
     SubtractOperation& operator=(const SubtractOperation& other) {
         Operation::operator=(other);
@@ -82,7 +82,7 @@ public:
 
 class MultiplyOperation : public Operation {
 public:
-    MultiplyOperation() : Operation("multiply", "*") {}
+    MultiplyOperation() : Operation("Multiply", "*") {}
     MultiplyOperation(const MultiplyOperation& other) : Operation(other) {}
     MultiplyOperation& operator=(const MultiplyOperation& other) {
         Operation::operator=(other);
@@ -95,7 +95,7 @@ public:
 
 class DivideOperation : public Operation {
 public:
-    DivideOperation() : Operation("divide", "/") {}
+    DivideOperation() : Operation("Divide", "/") {}
     DivideOperation(const DivideOperation& other) : Operation(other) {}
     DivideOperation& operator=(const DivideOperation& other) {
         Operation::operator=(other);
@@ -110,7 +110,7 @@ public:
 
 class PowerOperation : public Operation {
 public:
-    PowerOperation() : Operation("power", "^") {}
+    PowerOperation() : Operation("Power", "^") {}
     PowerOperation(const PowerOperation& other) : Operation(other) {}
     PowerOperation& operator=(const PowerOperation& other) {
         Operation::operator=(other);
@@ -123,7 +123,7 @@ public:
 
 class RootOperation : public Operation {
 public:
-    RootOperation() : Operation("root", "v") {}
+    RootOperation() : Operation("Root", "v") {}
     RootOperation(const RootOperation& other) : Operation(other) {}
     RootOperation& operator=(const RootOperation& other) {
         Operation::operator=(other);
