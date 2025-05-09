@@ -137,7 +137,7 @@ public:
 };
 
 class Calculator {
-    string name;
+    const char* name;
     size_t numberOfSupportedOperations;
     size_t capacityForOperations;
     Operation** operations;
@@ -152,10 +152,10 @@ public:
         this->operations = new Operation*[capacityForOperations];
     }
 
-    Calculator(string name, size_t n, Operation** operations) {
-        if (name.empty())
+    Calculator(const char* name, size_t n, Operation** operations) {
+        if (name == "\0" || strcmp(name, "") == 0)
             throw invalid_argument("(Calculator Para Constructor) Name is Empty!");
-        this->name = name;
+        this->name = strdup(name);
 
         if (n < 1)
             throw invalid_argument("(Calculator Para Constructor) Capacity is Empty!");
@@ -170,9 +170,9 @@ public:
     }
 
     Calculator(const Calculator& other) {
-        if (other.name.empty())
+        if (other.name == "\0" || strcmp(other.name, "") == 0)
             throw invalid_argument("(Calculator Copy Constructor) Name is Empty!");
-        this->name = other.name;
+        this->name = strdup(other.name);
 
         if (other.capacityForOperations < 1)
             throw invalid_argument("(Calculator Copy Constructor) Capacity is Empty!");
@@ -185,7 +185,7 @@ public:
 
     const Calculator& operator=(const Calculator& other) {
         if (this != &other) {
-            if (other.name.empty())
+            if (other.name == "\0" || strcmp(other.name, "") == 0)
                 throw invalid_argument("(Calculator Operator=) Name is Empty!");
             this->name = name;
 
@@ -284,7 +284,7 @@ public:
 double Calculator::numberOfSuccessfulCalculations = 0;
 
 int main() {
-    string name;
+    char name[100];
     cout << "Enter the calculator's name: ";
     cin >> name;
 
