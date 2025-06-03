@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -88,6 +89,7 @@ class Person {
 protected:
     string name; //Mustn't be empty
     int age; //Must be positive and lower than 65
+    static int numOfPeople;
 
 public:
 
@@ -98,6 +100,7 @@ public:
         if(age < 0 || age > 65)
             throw invalid_argument("(Person Para Constructor) Age is invalid!");
         this->age = age;
+        this->numOfPeople++;
     }
 
     Person(Person &other) {
@@ -107,6 +110,7 @@ public:
         if(other.age < 0 || other.age > 65)
             throw invalid_argument("(Person Copy Constructor) Age is invalid!");
         this->age = other.age;
+        this->numOfPeople++;
     }
 
     Person &operator=(Person &other) {
@@ -128,12 +132,19 @@ public:
     int getAge() {
         return this->age; 
     }
+
+    virtual int getWorkers() {
+        return this->numOfPeople;
+    }
 };
+
+int Person::numOfPeople = 0;
 
 class Employee : public Person {
     EmployeeSalaries* empSalaries;
     string position;
     int experience;
+    static int numOfEmployees;
 
 public:
     Employee(EmployeeSalaries* empSalaries, string position, int experience) : Person(name, age) {
@@ -145,6 +156,7 @@ public:
         if(experience < 1)
             throw invalid_argument("(Employee Para Constructor) Experience is invalid!");
         this->experience = experience;
+        this->numOfEmployees++;
     }
 
     Employee(Employee &other) : Person(other) {
@@ -156,6 +168,7 @@ public:
         if(other.experience < 1)
             throw invalid_argument("(Employee Copy Constructor) Experience is invalid!");
         this->experience = other.experience;
+        this->numOfEmployees++;
     }
 
     Employee &operator=(Employee &other) {
@@ -179,11 +192,59 @@ public:
     int getExp() {
         return experience;
     }
+
+    int getWorkers() override {
+        return numOfEmployees;
+    }
 };
+
+int Employee::numOfEmployees = 0;
 
 class Manager : public Person {
     string department; //Can be "delivery", "marketing", "sales", or "human resources"
+    static int numOfManagers;
 
 public:
     
+    Manager(string department) : Person(name, age) {
+        if(department != "delivery" || department != "marketing" || department != "sales" || department != "human resources")
+            throw invalid_argument("(Manager Para Constructor) Department is invalid!");
+        this->department = department;
+        this->numOfManagers++;
+    }
+
+    Manager(Manager &other) : Person(other) {
+        if(other.department != "delivery" || other.department != "marketing" || other.department != "sales" || other.department != "human resources")
+            throw invalid_argument("(Manager Copy Constructor) Department is invalid!");
+        this->department = other.department;
+        this->numOfManagers++;
+    }
+
+    Manager &operator=(Manager &other) {
+        if(this != &other) {
+            Person::operator=(other);
+            if(other.department != "delivery" || other.department != "marketing" || other.department != "sales" || other.department != "human resources")
+                throw invalid_argument("(Manager Operator=) Department is invalid!");
+            this->department = other.department;
+        }
+        return *this;
+    }
+
+    string getDept() {
+        return this->department;
+    }
+
+    int getWorkers() override {
+        return numOfManagers;
+    }
+
+    void payEmployeeByName(string empName, vector<Employee> &employees, double salary) {
+        for(size_t i = 0; i < employees.size(); i++) {
+            if(empName == employees[i].getName()) {
+                //salary needs to be added to employees[i]'s salaries array
+            }
+        }
+    }
 };
+
+int Manager::numOfManagers = 0;
