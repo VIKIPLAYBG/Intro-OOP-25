@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -20,6 +22,7 @@ public:
     }
 
     EmployeeSalaries(double* salaries, size_t size, size_t capacity, string employeeName) {
+        this->salaries = new double[capacity];
         for(size_t i = 0; i < capacity; i++) {
             if(salaries[i] < 910 || salaries[i] > 2500)
                 throw invalid_argument("(Employee Para Constructor) Invalid Salary!");
@@ -31,6 +34,7 @@ public:
     }
 
     EmployeeSalaries(EmployeeSalaries &other) {
+        this->salaries = new double[other.capacity];
         for(size_t i = 0; i < other.capacity; i++) {
             if(other.salaries[i] < 910 || other.salaries[i] > 2500)
                 throw invalid_argument("(Employee Copy Constructor) Invalid Salary!");
@@ -43,6 +47,7 @@ public:
 
     EmployeeSalaries &operator=(EmployeeSalaries &other) {
         if(this != &other) {
+            this->salaries = new double[other.capacity];
             for(size_t i = 0; i < other.capacity; i++) {
                 if(other.salaries[i] < 910 || other.salaries[i] > 2500)
                     throw invalid_argument("(Employee Operator=) Invalid Salary!");
@@ -70,14 +75,14 @@ public:
     void resize() {
         this->capacity *= 2;
         double* tmp = new double[this->capacity];
-        for(size_t i = 0; i < this->capacity; i++) {
+        for(size_t i = 0; i < this->size; i++) {
             tmp[i] = salaries[i];
         }
         delete[] salaries;
         salaries = tmp;
     }
 
-    EmployeeSalaries addSalary(double newSalary) {
+    void addSalary(double newSalary) {
         if(this->size == this->capacity)
             resize();
         salaries[this->size++] = newSalary;
@@ -141,6 +146,7 @@ public:
 int Person::numOfPeople = 0;
 
 class Employee : public Person {
+    
     EmployeeSalaries* empSalaries;
     string position;
     int experience;
@@ -193,6 +199,10 @@ public:
         return experience;
     }
 
+    void addSalary(double salary) {
+        empSalaries->addSalary(salary);
+    }
+
     int getWorkers() override {
         return numOfEmployees;
     }
@@ -239,12 +249,25 @@ public:
     }
 
     void payEmployeeByName(string empName, vector<Employee> &employees, double salary) {
-        for(size_t i = 0; i < employees.size(); i++) {
-            if(empName == employees[i].getName()) {
-                //salary needs to be added to employees[i]'s salaries array
+        for(auto employee : employees) {
+            if(empName == employee.getName()) {
+                employee.addSalary(salary);
+                break;
             }
         }
+        throw invalid_argument("(Manager Pay Employee) Employee not found!");
     }
 };
 
 int Manager::numOfManagers = 0;
+
+class FileManager {
+
+    friend istream &operator>>(istream &is, ) {
+
+    }
+
+    friend ostream &operator<<(ostream &os, ) {
+
+    }
+};
