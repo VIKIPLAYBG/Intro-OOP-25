@@ -263,11 +263,42 @@ int Manager::numOfManagers = 0;
 
 class FileManager {
 
-    friend istream &operator>>(istream &is, ) {
+    const string in_name, out_name;
+
+public:
+    FileManager read(istream) {
 
     }
 
-    friend ostream &operator<<(ostream &os, ) {
+    friend istream &operator>>(istream &is, Person person) {
+        string buffer;
+        getline(is, buffer);
 
+        cout << buffer << endl;
+        
+        stringstream ss(buffer);
+
+        string strName, strAge;
+
+        getline(ss, strName, ',');
+        getline(ss, strAge, ',');
+
+        cout << strName << endl;
+        cout << strAge << endl;
+        stringstream ssName(strName), ssAge(strAge);
+
+        string name;
+        int age;
+
+        ssName >> name;
+        ssAge >> age;
     }
 };
+
+void main() {
+    try {
+
+    } catch(exception &e) {
+        cerr << "Error!" << e.what() << endl;
+    }
+}
