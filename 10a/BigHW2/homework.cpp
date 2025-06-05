@@ -108,7 +108,7 @@ public:
         this->numOfPeople++;
     }
 
-    Person(Person &other) {
+    Person(const Person &other) {
         if(other.name.empty())
             throw invalid_argument("(Person Copy Constructor) Name is empty!");
         this->name = other.name;
@@ -118,7 +118,7 @@ public:
         this->numOfPeople++;
     }
 
-    Person &operator=(Person &other) {
+    Person &operator=(const Person &other) {
         if(this != &other) {
             if(other.name.empty())
                 throw invalid_argument("(Person Operator=) Name is empty!");
@@ -165,7 +165,7 @@ public:
         this->numOfEmployees++;
     }
 
-    Employee(Employee &other) : Person(other) {
+    Employee(const Employee &other) : Person(other) {
         for(size_t i = 0; i < other.empSalaries->getSize(); i++)
             this->empSalaries[i] = other.empSalaries[i];
         if(other.position.empty())
@@ -177,7 +177,7 @@ public:
         this->numOfEmployees++;
     }
 
-    Employee &operator=(Employee &other) {
+    Employee &operator=(const Employee &other) {
         if(this != &other) {
             for(size_t i = 0; i < other.empSalaries->getSize(); i++)
                 this->empSalaries[i] = other.empSalaries[i];
@@ -223,14 +223,14 @@ public:
         this->numOfManagers++;
     }
 
-    Manager(Manager &other) : Person(other) {
+    Manager(const Manager &other) : Person(other) {
         if(other.department != "delivery" || other.department != "marketing" || other.department != "sales" || other.department != "human resources")
             throw invalid_argument("(Manager Copy Constructor) Department is invalid!");
         this->department = other.department;
         this->numOfManagers++;
     }
 
-    Manager &operator=(Manager &other) {
+    Manager &operator=(const Manager &other) {
         if(this != &other) {
             Person::operator=(other);
             if(other.department != "delivery" || other.department != "marketing" || other.department != "sales" || other.department != "human resources")
@@ -261,44 +261,84 @@ public:
 
 int Manager::numOfManagers = 0;
 
+ostream &operator<<(ostream &os, Person &person) {
+    os << person.getName() << ' ' << person.getAge();
+    return os;
+}
+
+istream &operator>>(istream &is, Person &person) {
+    string line;
+    getline(is, line);
+
+    stringstream ss(line);
+
+    string strName, strAge;
+    getline(ss, strName, ',');
+    getline(ss, strAge, ',');
+
+    stringstream ssName(strName), ssAge(strAge);
+
+    string name;
+    int age;
+
+    ssName >> name;
+    ssAge >> age;
+
+    if(name.empty())
+        throw invalid_argument("(FileManager Operator>>) Name is empty!");
+
+    if(age < 0 || age > 65)
+        throw invalid_argument("(FileManager Operator>>) Age is invalid!");
+
+    person = Person(name, age);
+    return is;
+}
+
 class FileManager {
 
     const string in_name, out_name;
 
 public:
-    FileManager read(istream) {
+    FileManager(string in, string out) : in_name(in), out_name(out) {}
 
+    void read(vector<Person> people, string personName, int personAge) {
+        Person person(personName, personAge);
+        ifstream inFile(in_name);
+        if(!inFile)
+            throw runtime_error("(FileManager Read) Cannot open input file!");
+
+        while (!inFile.eof()) {
+            inFile >> person;
+            people.push_back(person);
+        }
+        inFile.close();
     }
 
-    friend istream &operator>>(istream &is, Person person) {
-        string buffer;
-        getline(is, buffer);
+    void write(const vector<Person> people) {
+        ofstream outFile(out_name);
+        if(!outFile)
+            throw runtime_error("(FileManager Write) Cannot open output file!");
 
-        cout << buffer << endl;
-        
-        stringstream ss(buffer);
-
-        string strName, strAge;
-
-        getline(ss, strName, ',');
-        getline(ss, strAge, ',');
-
-        cout << strName << endl;
-        cout << strAge << endl;
-        stringstream ssName(strName), ssAge(strAge);
-
-        string name;
-        int age;
-
-        ssName >> name;
-        ssAge >> age;
+        for(auto p: people) {
+            outFile << p << endl;
+        }
+        outFile.close();
     }
 };
 
-void main() {
+int main() {
     try {
-
+        vector<Person> people;
+        FileManager manager("read.txt", "write.txt");
+        Person person("Antonio Slavkov", 32);
+        manager.read(people, "Antonio Slavkov", 32);
+        for(auto p : people) {
+            cout << p << endl;
+        }
+        manager.write(people);
     } catch(exception &e) {
         cerr << "Error!" << e.what() << endl;
     }
+
+    return 0;
 }
