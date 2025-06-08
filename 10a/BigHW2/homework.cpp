@@ -8,6 +8,8 @@ using namespace std;
 
 class EmployeeSalaries {
 
+protected:
+
     double* empSalaries; //positive, between 910 and 2500
     size_t size;
     size_t capacity;
@@ -74,13 +76,19 @@ public:
         delete[] this->empSalaries;
     }
 
-    double getAvgSalary() {
+    double getAvgSalary() const {
         double sum = 0;
         for(int i = 0; i < this->size; i++) {
             sum += empSalaries[i];
         }
         sum /= this->size;
         return sum;
+    }
+
+    void replaceInitialSal(double empSal) {
+        if(empSal < 910 || empSal > 2500)
+            throw invalid_argument("(EmployeeSalaries Set Salary) Index out of range!");
+        this->empSalaries[0] = empSal;
     }
 
     void addSalary(double salary) {
@@ -160,6 +168,8 @@ int Person::count = 0;
 
 class Employee : public Person {
 
+protected:
+
     string position; //Cannot be empty
     int experience; //1 or greater
     EmployeeSalaries salaries; //All salaries must be valid
@@ -202,12 +212,22 @@ public:
         return this->experience;
     }
 
-    double calculateAverageSalary() {
+    int getSalSize() const {
+        return this->salaries.getSize();
+    }
+
+    double calculateAverageSalary() const {
         return this->salaries.getAvgSalary();
     }
 
     void addSalary(double salary) {
         this->salaries.addSalary(salary);
+    }
+
+    void replaceInitialSalary(double empSal) {
+        if(empSal < 910 || empSal > 2500)
+            throw invalid_argument("(Employee ReplaceInitialSalary) Salary is invalid!");
+        this->salaries.replaceInitialSal(empSal);
     }
 
     static int getCount() {
@@ -347,38 +367,53 @@ public:
             char type = p->getType();
             if (type == 'E') {
                 Employee* e = dynamic_cast<Employee*>(p);
-                out << "E " << e->getName() << " " << e->getAge() << " " << e->getPos() << " " << e->getExp() << "\n";
+                out << "E " << e->getName() << " " << e->getAge() << " " << e->getPos() << " " << e->getExp() << " " << e->calculateAverageSalary() << endl;
             }
             else if (type == 'M') {
                 Manager* m = dynamic_cast<Manager*>(p);
-                out << "M " << m->getName() << " " << m->getAge() << " " << m->getDept() << "\n";
+                out << "M " << m->getName() << " " << m->getAge() << " " << m->getDept() << endl;
             }
         }
 
         out.close();
     }
 
-    static std::vector<Person*> readFromFile(const std::string& filename) {
-        std::vector<Person*> result;
-        std::ifstream in(filename);
+    static vector<Person*> readFromFile(const string& filename) {
+        vector<Person*> result;
+        ifstream in(filename);
         if (!in.is_open()) throw std::runtime_error("Cannot open file for reading!");
 
-        std::string line;
+        string line;
         while (getline(in, line)) {
-            std::istringstream iss(line);
+            stringstream iss(line);
             char type;
             iss >> type;
             if (type == 'E') {
-                std::string name, pos;
+                string name, pos;
                 int age, exp;
                 iss >> name >> age >> pos >> exp;
                 result.push_back(new Employee(name, age, pos, exp));
             }
             else if (type == 'M') {
-                std::string name, dept;
+                string name, empName, dept;
                 int age;
-                iss >> name >> age >> dept;
+                double empSal;
+                iss >> name >> age >> dept >> empName >> empSal;
                 result.push_back(new Manager(name, age, dept));
+
+                for(auto p : result) {
+                    if(p->getType() == 'E') {
+                        Employee* e = dynamic_cast<Employee*>(p);
+                        try {
+                            if(e->getName() == empName)
+                                if(e->getSalSize() == 1 && e->calculateAverageSalary() == 910)
+                                    e->replaceInitialSalary(empSal);
+                                else e->addSalary(empSal);
+                        } catch (exception &e) {
+                            cerr << "(Read From File) Couldn't add salary!" << endl;
+                        }
+                    }
+                }
             }
         }
 

@@ -1,4 +1,4 @@
-E MariaPetrova 24 designer 4
-E SilviyaPetrova 28 delivery-stocks 6
-M ViktorPanayotov 32 marketing MariaPetrova 1800
-M KirilDomuschiev 35 delivery SilviyaPetrova 1600
+E MariaPetrova 24 Designer 4
+E SilviyaPetrova 28 Delivery-Stocks 6
+M ViktorPanayotov 32 Marketing MariaPetrova 1800
+M KirilDomuschiev 35 Delivery SilviyaPetrova 1600
