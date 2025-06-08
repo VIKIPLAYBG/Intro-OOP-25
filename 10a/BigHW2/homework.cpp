@@ -6,6 +6,9 @@
 
 using namespace std;
 
+
+//Employee Salaries:
+
 class EmployeeSalaries {
 
 protected:
@@ -113,6 +116,11 @@ public:
 
 };
 
+
+
+
+//Person:
+
 class Person {
 
 protected:
@@ -165,6 +173,11 @@ public:
 };
 
 int Person::count = 0;
+
+
+
+
+//Employee:
 
 class Employee : public Person {
 
@@ -276,6 +289,10 @@ public:
 
 int Employee::eCount = 0;
 
+
+
+//Manager:
+
 class Manager : public Person {
 
     string department; //"delivery", "marketing", "sales" or "human resources"
@@ -349,6 +366,11 @@ public:
 };
 
 int Manager::mCount = 0;
+
+
+
+
+//FileManager:
 
 class FileManager {
 
@@ -440,6 +462,11 @@ public:
         return result;
     }
 };
+
+
+
+
+//Main:
 
 int main() {
 
