@@ -381,36 +381,55 @@ public:
     static vector<Person*> readFromFile(const string& filename) {
         vector<Person*> result;
         ifstream in(filename);
-        if (!in.is_open()) throw std::runtime_error("Cannot open file for reading!");
+        if (!in.is_open()) throw runtime_error("Cannot open file for reading!");
 
         string line;
         while (getline(in, line)) {
             stringstream iss(line);
             char type;
             iss >> type;
+
             if (type == 'E') {
-                string name, pos;
+                string fstName, lastName, pos;
                 int age, exp;
-                iss >> name >> age >> pos >> exp;
+                iss >> fstName >> lastName >> age >> pos >> exp;
+                string name = fstName + " " + lastName;
                 result.push_back(new Employee(name, age, pos, exp));
             }
             else if (type == 'M') {
-                string name, empName, dept;
-                int age;
-                double empSal;
-                iss >> name >> age >> dept >> empName >> empSal;
-                result.push_back(new Manager(name, age, dept));
+                vector<string> tokens;
+                string token;
+                while (iss >> token) tokens.push_back(token);
 
-                for(auto p : result) {
-                    if(p->getType() == 'E') {
+                if (tokens.size() < 7) continue;
+
+                string mngName = tokens[0] + " " + tokens[1];
+                int age = stoi(tokens[2]);
+
+                size_t i = 3;
+                string department = "";
+                while (i < tokens.size() - 3) {
+                    if (!department.empty()) department += " ";
+                    department += tokens[i++];
+                }
+
+                string empName = tokens[i] + " " + tokens[i + 1];
+                double salary = stod(tokens[i + 2]);
+
+                result.push_back(new Manager(mngName, age, department));
+
+                for (auto p : result) {
+                    if (p->getType() == 'E') {
                         Employee* e = dynamic_cast<Employee*>(p);
-                        try {
-                            if(e->getName() == empName)
-                                if(e->getSalSize() == 1 && e->calculateAverageSalary() == 910)
-                                    e->replaceInitialSalary(empSal);
-                                else e->addSalary(empSal);
-                        } catch (exception &e) {
-                            cerr << "(Read From File) Couldn't add salary!" << endl;
+                        if (e && e->getName() == empName) {
+                            try {
+                                if (e->getSalSize() == 1 && e->calculateAverageSalary() == 910)
+                                    e->replaceInitialSalary(salary);
+                                else
+                                    e->addSalary(salary);
+                            } catch (exception& ex) {
+                                cerr << "(Read From File) Couldn't add salary: " << ex.what() << endl;
+                            }
                         }
                     }
                 }

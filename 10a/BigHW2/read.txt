@@ -1,4 +1,6 @@
-E MariaPetrova 24 Designer 4
-E SilviyaPetrova 28 Delivery-Stocks 6
-M ViktorPanayotov 32 Marketing MariaPetrova 1800
-M KirilDomuschiev 35 Delivery SilviyaPetrova 1600
+E Maria Petrova 24 Designer 4
+E Silviya Petrova 28 Delivery-Stocks 6
+M Viktor Panayotov 32 Marketing Maria Petrova 1800.00
+M Marin Valeninski 32 Sales Maria Petrova 1234.56
+M Kiril Domuschiev 35 Delivery Silviya Petrova 1600.00
+M Petar Petrov 40 Human Resources Silviya Petrova 2148.56
